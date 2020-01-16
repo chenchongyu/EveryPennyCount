@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">分毫必争</string>
+    <string name="accessibility_service_description">打开上面的开关，让你在这个春节不错过任何一个红包，分毫必争，锱铢必较！</string>
+    <string name="accessibility_service_label">不错过每一个红包</string>
+</resources>

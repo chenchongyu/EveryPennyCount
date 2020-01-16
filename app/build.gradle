@@ -1,0 +1,65 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "28.0.1"
+    defaultConfig {
+        applicationId "runningcode.net.epc"
+        minSdkVersion 18
+        targetSdkVersion 28
+        manifestPlaceholders = [CHANNEL: "default1"]
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        flavorDimensions "default"
+        useLibrary 'org.apache.http.legacy'
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("../epc.keystore")
+            storePassword "epc123456"
+            keyAlias "epc"
+            keyPassword "epc123456"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        default1 {}
+        xiaomi {}
+        wandoujia {}
+        baidu {}
+        QQ {}
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [CHANNEL: name]
+        }
+    }
+
+    //修改生成的apk名字
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "EPC_${defaultConfig.versionName}_" + releaseTime() + "_${variant.productFlavors[0].name}.apk"
+        }
+
+    }
+
+
+}
+
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+}
