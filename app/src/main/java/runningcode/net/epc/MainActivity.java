@@ -8,7 +8,10 @@ import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sixth.adwoad.AdwoAdView;
+import com.miui.zeus.mimo.sdk.ad.AdWorkerFactory;
+import com.miui.zeus.mimo.sdk.ad.IAdWorker;
+import com.miui.zeus.mimo.sdk.listener.MimoAdListener;
+import com.xiaomi.ad.common.pojo.AdType;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +20,7 @@ import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
     private static final String AD_ID = "4397d89153044c8aa5bd36faf6332d0b";
-    private AdwoAdView adView;
+    private IAdWorker adView;
     private ViewGroup container;
 
     @Override
@@ -40,6 +43,40 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void initAd() {
+        try {
+            adView = AdWorkerFactory.getAdWorker(this, container, new MimoAdListener() {
+                @Override
+                public void onAdPresent() {
+                }
+
+                @Override
+                public void onAdClick() {
+                }
+
+                @Override
+                public void onAdDismissed() {
+                }
+
+                @Override
+                public void onAdFailed(String s) {
+                }
+
+                @Override
+                public void onAdLoaded(int size) {
+                }
+
+                @Override
+                public void onStimulateSuccess() {
+                }
+            }, AdType.AD_BANNER);
+
+            adView.loadAndShow("802e356f1726f9ff39c69308bfd6f06a");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void initView() {
         View openView = findViewById(R.id.open);
         openView.setVisibility(View.VISIBLE);
@@ -51,9 +88,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         container = findViewById(R.id.ad_container);
-        adView = new AdwoAdView(this, AD_ID, false, 20);
-        adView.setBannerMatchScreenWidth(true);
-        container.addView(adView);
+        initAd();
     }
 
     @Override
@@ -61,6 +96,15 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 123) {
             initView();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            super.onDestroy();
+            adView.recycle();
+        } catch (Exception e) {
         }
     }
 }
