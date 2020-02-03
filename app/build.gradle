@@ -5,13 +5,14 @@ android {
     buildToolsVersion "28.0.1"
     defaultConfig {
         applicationId "runningcode.net.epc"
-        minSdkVersion 19
+        minSdkVersion 18
         targetSdkVersion 28
         manifestPlaceholders = [CHANNEL: "default1"]
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "default"
+        useLibrary 'org.apache.http.legacy'
     }
 
     signingConfigs {
